@@ -20,6 +20,7 @@ public class BootstrapEbean {
     config.loadTestProperties();
 
     config.setTenantMode(TenantMode.SCHEMA);
+    config.setDatabasePlatform(new H2Platform());
     config.setCurrentTenantProvider(new CurrentTenant());
     config.setTenantSchemaProvider(new SchemaProvider());
   }
