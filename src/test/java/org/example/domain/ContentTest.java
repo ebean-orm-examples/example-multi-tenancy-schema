@@ -64,6 +64,7 @@ public class ContentTest extends BaseTestCase {
 
 	}
 
+	//runs well
 	private void findAll1(String tenant) {
 
 		CompletionStage<List<Content>> allForTenant = CompletableFuture.supplyAsync(() -> {
