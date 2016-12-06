@@ -48,29 +48,56 @@ public class ContentTest extends BaseTestCase {
 		OtherAuthor.setContents(Arrays.asList(beanOther));
 		OtherAuthor.save();
 
-		UserContext.set("some", "ten_1");
 		System.out.println("Tenant r1");
-		findAll();
+		findAll1("ten_1");
 
-		UserContext.set("other", "ten_2");
 		System.out.println("Tenant f1");
-		findAll();
+		findAll1("ten_2");
+		
+		System.out.println("--------------------------next round----------------------------\n");
+		
+		System.out.println("Tenant r1");
+		findAll2("ten_1");
+
+		System.out.println("Tenant f1");
+		findAll2("ten_2");
 
 	}
 
-	private void findAll() {
+	private void findAll1(String tenant) {
 
 		CompletionStage<List<Content>> allForTenant = CompletableFuture.supplyAsync(() -> {
-			UserContext.set("other", "ten_2");
+			UserContext.set("other", tenant);
+			System.out.println("find all (for the current tenant) " + UserContext.get().getTenantId());
+			return Ebean.find(Content.class).findList();
+		}).thenApplyAsync(allContents -> {
+			allContents.forEach(content -> {
+				System.out.println("Author: " + content.getAuthor().getName());
+				System.out.println("Content: " + content);
+			});
+			return allContents;
+		});
+		try {
+			allForTenant.toCompletableFuture().get();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	//Strange behaviour and eventually throws.
+	private void findAll2(String tenant) {
+
+		CompletionStage<List<Content>> allForTenant = CompletableFuture.supplyAsync(() -> {
+			UserContext.set("other", tenant);
 			System.out.println("find all (for the current tenant) " + UserContext.get().getTenantId());
 			return Ebean.find(Content.class).findList();
 		});
 
 		try {
-			for (Content content : allForTenant.toCompletableFuture().get()) {
-				
-				System.out.println(content.getAuthor().name);
-			}
+			allForTenant.toCompletableFuture().get().forEach(content -> {
+				System.out.println("Author: " + content.getAuthor().getName());
+				System.out.println("Content: " + content);
+			});
 		} catch (InterruptedException | ExecutionException e) {
 			throw new RuntimeException(e);
 		}
