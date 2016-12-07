@@ -55,12 +55,12 @@ public class ContentTest extends BaseTestCase {
 		findAll1("ten_2");
 		
 		System.out.println("--------------------------next round----------------------------\n");
-		
-		System.out.println("Tenant r1");
+
+		System.out.println("Tenant One -----------");
 		findAll2("ten_1");
 
-		System.out.println("Tenant f1");
-		findAll2("ten_2");
+		System.out.println("Tenant Two -----------");
+		findAll1("ten_2");
 
 	}
 
@@ -96,6 +96,7 @@ public class ContentTest extends BaseTestCase {
 
 		try {
 			allForTenant.toCompletableFuture().get().forEach(content -> {
+				UserContext.set("other", tenant);
 				System.out.println("Author: " + content.getAuthor().getName());
 				System.out.println("Content: " + content);
 			});
