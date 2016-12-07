@@ -6,7 +6,10 @@ class SchemaProvider implements TenantSchemaProvider {
 
   @Override
   public String schema(String tenantId) {
-    return (tenantId == null) ? "public" : tenantId;
+    if (tenantId == null) {
+      throw new RuntimeException("No current tenantId supplied");
+    }
+    return tenantId;
   }
 
 }
