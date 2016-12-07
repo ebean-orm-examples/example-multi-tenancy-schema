@@ -1,6 +1,8 @@
 package org.example.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Content extends BaseDomain {
@@ -8,6 +10,10 @@ public class Content extends BaseDomain {
   String title;
   String byline;
   String body;
+  
+  @Column(name="author")
+  @ManyToOne
+  public Author author;
 
   public String toString() {
     return "id:" + id + " title:" + title;
@@ -36,4 +42,13 @@ public class Content extends BaseDomain {
   public void setBody(String body) {
     this.body = body;
   }
+
+public Author getAuthor() {
+	return author;
+}
+
+public void setAuthor(Author author) {
+	this.author = author;
+}
+  
 }

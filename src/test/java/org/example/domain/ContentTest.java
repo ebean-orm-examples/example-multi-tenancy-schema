@@ -4,59 +4,103 @@ import com.avaje.ebean.Ebean;
 import org.example.bootstrap.UserContext;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 
 public class ContentTest extends BaseTestCase {
 
-  @Test
-  public void insert() {
+	@Test
+	public void insert() {
 
-    UserContext.set("rob", "ten_1");
+		UserContext.set("rob", "ten_1");
 
-    Content bean = new Content();
-    bean.setTitle("Testing 123");
-    bean.setByline("Thinking about testing with databases");
-    bean.setBody("Lots of interesting stuff to say here");
-    bean.save();
+		Author author = new Author();
+		author.setName("rob");
+		Content bean = new Content();
+		bean.setTitle("Testing 123");
+		bean.setByline("Thinking about testing with databases");
+		bean.setBody("Lots of interesting stuff to say here");
+		author.setContents(Arrays.asList(bean));
+		author.save();
 
-    UserContext.set("roger", "ten_1");
+		UserContext.set("roger", "ten_1");
 
-    bean = new Content();
-    bean.setTitle("Testing integration");
-    bean.setByline("More testing databases");
-    bean.setBody("Meh");
-    bean.save();
+		author = new Author();
+		author.setName("roger");
+		bean = new Content();
+		bean.setTitle("Testing integration");
+		bean.setByline("More testing databases");
+		bean.setBody("Meh");
+		author.setContents(Arrays.asList(bean));
+		author.save();
 
+		UserContext.set("fi", "ten_2");
 
-    UserContext.set("fi", "ten_2");
+		Author OtherAuthor = new Author();
+		OtherAuthor.setName("fi");
+		Content beanOther = new Content();
+		beanOther.setTitle("Banana");
+		beanOther.setByline("Yummy and yellow");
+		beanOther.setBody("Food content");
+		OtherAuthor.setContents(Arrays.asList(beanOther));
+		OtherAuthor.save();
 
-    Content beanOther = new Content();
-    beanOther.setTitle("Banana");
-    beanOther.setByline("Yummy and yellow");
-    beanOther.setBody("Food content");
-    beanOther.save();
+		System.out.println("Tenant r1");
+		findAll1("ten_1");
 
+		System.out.println("Tenant f1");
+		findAll1("ten_2");
+		
+		System.out.println("--------------------------next round----------------------------\n");
+		
+		System.out.println("Tenant r1");
+		findAll2("ten_1");
 
-    UserContext.set("some", "ten_1");
-    System.out.println("Tenant r1");
-    findAll();
+		System.out.println("Tenant f1");
+		findAll2("ten_2");
 
-    UserContext.set("other", "ten_2");
-    System.out.println("Tenant f1");
-    findAll();
+	}
 
-  }
+	//runs well
+	private void findAll1(String tenant) {
 
-  private void findAll() {
+		CompletionStage<List<Content>> allForTenant = CompletableFuture.supplyAsync(() -> {
+			UserContext.set("other", tenant);
+			System.out.println("find all (for the current tenant) " + UserContext.get().getTenantId());
+			return Ebean.find(Content.class).findList();
+		}).thenApplyAsync(allContents -> {
+			allContents.forEach(content -> {
+				System.out.println("Author: " + content.getAuthor().getName());
+				System.out.println("Content: " + content);
+			});
+			return allContents;
+		});
+		try {
+			allForTenant.toCompletableFuture().get();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    System.out.println("find all (for the current tenant) " + UserContext.get().getTenantId());
+	//Strange behaviour and eventually throws.
+	private void findAll2(String tenant) {
 
-    List<Content> allForTenant =
-        Ebean.find(Content.class)
-            .findList();
+		CompletionStage<List<Content>> allForTenant = CompletableFuture.supplyAsync(() -> {
+			UserContext.set("other", tenant);
+			System.out.println("find all (for the current tenant) " + UserContext.get().getTenantId());
+			return Ebean.find(Content.class).findList();
+		});
 
-    for (Content content : allForTenant) {
-      System.out.println(content);
-    }
-  }
+		try {
+			allForTenant.toCompletableFuture().get().forEach(content -> {
+				System.out.println("Author: " + content.getAuthor().getName());
+				System.out.println("Content: " + content);
+			});
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
