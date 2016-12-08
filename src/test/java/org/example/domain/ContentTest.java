@@ -17,43 +17,43 @@ public class ContentTest extends BaseTestCase {
 
 		UserContext.set("rob", "ten_1");
 
-		Author author = new Author();
-		author.setName("rob");
-		Content bean = new Content();
-		bean.setTitle("Testing 123");
-		bean.setByline("Thinking about testing with databases");
-		bean.setBody("Lots of interesting stuff to say here");
-		author.setContents(Arrays.asList(bean));
-		author.save();
+    Author author = new Author();
+    author.setName("rob");
+    Content bean = new Content();
+    bean.setTitle("Testing 123");
+    bean.setByline("Thinking about testing with databases");
+    bean.setBody("Lots of interesting stuff to say here");
+    author.setContents(Arrays.asList(bean));
+    author.save();
 
-		UserContext.set("roger", "ten_1");
+    UserContext.set("roger", "ten_1");
 
-		author = new Author();
-		author.setName("roger");
-		bean = new Content();
-		bean.setTitle("Testing integration");
-		bean.setByline("More testing databases");
-		bean.setBody("Meh");
-		author.setContents(Arrays.asList(bean));
-		author.save();
+    author = new Author();
+    author.setName("roger");
+    bean = new Content();
+    bean.setTitle("Testing integration");
+    bean.setByline("More testing databases");
+    bean.setBody("Meh");
+    author.setContents(Arrays.asList(bean));
+    author.save();
 
-		UserContext.set("fi", "ten_2");
+    UserContext.set("fi", "ten_2");
 
-		Author OtherAuthor = new Author();
-		OtherAuthor.setName("fi");
-		Content beanOther = new Content();
-		beanOther.setTitle("Banana");
-		beanOther.setByline("Yummy and yellow");
-		beanOther.setBody("Food content");
-		OtherAuthor.setContents(Arrays.asList(beanOther));
-		OtherAuthor.save();
+    Author OtherAuthor = new Author();
+    OtherAuthor.setName("fi");
+    Content beanOther = new Content();
+    beanOther.setTitle("Banana");
+    beanOther.setByline("Yummy and yellow");
+    beanOther.setBody("Food content");
+    OtherAuthor.setContents(Arrays.asList(beanOther));
+    OtherAuthor.save();
 
-		System.out.println("Tenant r1");
-		findAll1("ten_1");
+    System.out.println("Tenant r1");
+    findAll1("ten_1");
 
-		System.out.println("Tenant f1");
-		findAll1("ten_2");
-		
+    System.out.println("Tenant f1");
+    findAll1("ten_2");
+
 		System.out.println("--------------------------next round----------------------------\n");
 
 		System.out.println("Tenant One -----------");
@@ -96,7 +96,7 @@ public class ContentTest extends BaseTestCase {
 
 		try {
 			allForTenant.toCompletableFuture().get().forEach(content -> {
-				UserContext.set("other", tenant);
+				// tenantId automatically provided by "load context"
 				System.out.println("Author: " + content.getAuthor().getName());
 				System.out.println("Content: " + content);
 			});

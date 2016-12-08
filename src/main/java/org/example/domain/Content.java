@@ -10,8 +10,8 @@ public class Content extends BaseDomain {
   String title;
   String byline;
   String body;
-  
-  @Column(name="author")
+
+  @Column(name = "author")
   @ManyToOne
   public Author author;
 
@@ -43,12 +43,12 @@ public class Content extends BaseDomain {
     this.body = body;
   }
 
-public Author getAuthor() {
-	return author;
-}
+  public Author getAuthor() {
+    return author;
+  }
 
-public void setAuthor(Author author) {
-	this.author = author;
-}
-  
+  public void setAuthor(Author author) {
+    this.author = author;
+  }
+
 }
