@@ -2,8 +2,8 @@ package main;
 
 import java.io.IOException;
 
-import com.avaje.ebean.config.dbplatform.postgres.PostgresPlatform;
-import com.avaje.ebean.dbmigration.DbMigration;
+import io.ebean.config.dbplatform.postgres.PostgresPlatform;
+import io.ebean.dbmigration.DbMigration;
 
 /**
  * Generate the DB Migration.

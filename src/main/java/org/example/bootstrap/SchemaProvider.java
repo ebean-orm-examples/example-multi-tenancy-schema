@@ -1,6 +1,6 @@
 package org.example.bootstrap;
 
-import com.avaje.ebean.config.TenantSchemaProvider;
+import io.ebean.config.TenantSchemaProvider;
 
 class SchemaProvider implements TenantSchemaProvider {
 

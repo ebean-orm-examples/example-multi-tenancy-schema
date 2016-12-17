@@ -1,10 +1,10 @@
 package org.example.bootstrap;
 
-import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.EbeanServerFactory;
-import com.avaje.ebean.config.ServerConfig;
-import com.avaje.ebean.config.TenantMode;
-import com.avaje.ebean.config.dbplatform.h2.*;
+import io.ebean.EbeanServer;
+import io.ebean.EbeanServerFactory;
+import io.ebean.config.ServerConfig;
+import io.ebean.config.TenantMode;
+import io.ebean.config.dbplatform.h2.H2Platform;
 
 public class BootstrapEbean {
 

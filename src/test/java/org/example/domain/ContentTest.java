@@ -1,10 +1,5 @@
 package org.example.domain;
 
-import com.avaje.ebean.Ebean;
-import org.example.bootstrap.UserContext;
-import org.example.domain.Role.RoleName;
-import org.testng.annotations.Test;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +7,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+
+import org.example.bootstrap.UserContext;
+import org.example.domain.Role.RoleName;
+import org.testng.annotations.Test;
+
+import io.ebean.Ebean;
 
 public class ContentTest extends BaseTestCase {
 

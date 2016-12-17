@@ -3,7 +3,7 @@ package org.example.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import com.avaje.ebean.annotation.EnumValue;
+import io.ebean.annotation.EnumValue;
 
 @Entity
 public class Role extends BaseDomain {

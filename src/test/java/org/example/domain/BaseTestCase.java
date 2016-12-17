@@ -1,9 +1,10 @@
 package org.example.domain;
 
-import com.avaje.ebean.EbeanServer;
 import org.example.bootstrap.BootstrapEbean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.ebean.EbeanServer;
 
 public class BaseTestCase {
 
