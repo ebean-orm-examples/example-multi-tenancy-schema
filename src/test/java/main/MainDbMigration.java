@@ -1,9 +1,9 @@
 package main;
 
-import com.avaje.ebean.config.Platform;
-import com.avaje.ebean.dbmigration.DbMigration;
-
 import java.io.IOException;
+
+import com.avaje.ebean.config.dbplatform.postgres.PostgresPlatform;
+import com.avaje.ebean.dbmigration.DbMigration;
 
 /**
  * Generate the DB Migration.
@@ -20,7 +20,7 @@ public class MainDbMigration {
     //System.setProperty("ddl.migration.pendingDropsFor", "1.1");
 
     DbMigration dbMigration = new DbMigration();
-    dbMigration.setPlatform(Platform.POSTGRES);
+    dbMigration.setPlatform(new PostgresPlatform());
     // generate the migration ddl and xml
     dbMigration.generateMigration();
   }

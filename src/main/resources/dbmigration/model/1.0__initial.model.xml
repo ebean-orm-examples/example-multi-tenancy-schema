@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
     <changeSet type="apply">
-        <createTable name="content" pkName="pk_content">
-            <column name="id" type="bigint" primaryKey="true"/>
+        <createTable name="address" identityType="external" pkName="pk_address">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="description" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+        </createTable>
+        <createTable name="author" identityType="external" pkName="pk_author">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="name" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+        </createTable>
+        <createTable name="author_address" pkName="pk_author_address">
+            <column name="author_id" type="uuid" notnull="true" primaryKey="true"/>
+            <column name="address_id" type="uuid" notnull="true" primaryKey="true"/>
+            <foreignKey name="fk_author_address_author" columnNames="author_id" refColumnNames="id" refTableName="author" indexName="ix_author_address_author"/>
+            <foreignKey name="fk_author_address_address" columnNames="address_id" refColumnNames="id" refTableName="address" indexName="ix_author_address_address"/>
+        </createTable>
+        <createTable name="author_role" pkName="pk_author_role">
+            <column name="author_id" type="uuid" notnull="true" primaryKey="true"/>
+            <column name="role_id" type="uuid" notnull="true" primaryKey="true"/>
+            <foreignKey name="fk_author_role_author" columnNames="author_id" refColumnNames="id" refTableName="author" indexName="ix_author_role_author"/>
+            <foreignKey name="fk_author_role_role" columnNames="role_id" refColumnNames="id" refTableName="role" indexName="ix_author_role_role"/>
+        </createTable>
+        <createTable name="content" identityType="external" pkName="pk_content">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
             <column name="title" type="varchar"/>
             <column name="byline" type="varchar"/>
             <column name="body" type="varchar"/>
+            <column name="author" type="uuid" references="author.id" foreignKeyName="fk_content_author" foreignKeyIndex="ix_content_author"/>
+            <column name="version" type="bigint" notnull="true"/>
+        </createTable>
+        <createTable name="role" identityType="external" pkName="pk_role">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="name" type="varchar(5)" checkConstraint="check ( name in ('admin'))" checkConstraintName="ck_role_name"/>
             <column name="version" type="bigint" notnull="true"/>
         </createTable>
     </changeSet>
